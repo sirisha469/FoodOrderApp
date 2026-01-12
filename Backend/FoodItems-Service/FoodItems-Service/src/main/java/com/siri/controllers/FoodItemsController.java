@@ -1,8 +1,12 @@
 package com.siri.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -34,11 +38,23 @@ public class FoodItemsController {
       try {
         foodItems = objectMapper.readValue(food, FoodItemsRequest.class);
       }  catch (JsonProcessingException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     
     FoodItemsResponse response = foodItemsService.addFood(foodItems, file);
     return new ResponseEntity<>(response, HttpStatus.CREATED);
+  }
+
+
+  @GetMapping
+  public ResponseEntity<List<FoodItemsResponse>> readFoods(){
+    List<FoodItemsResponse> foodItems = foodItemsService.readFoodItems();
+    return new ResponseEntity<>(foodItems, HttpStatus.OK);
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<FoodItemsResponse> readFood(@PathVariable String id){
+    FoodItemsResponse response = foodItemsService.readFoodItem(id);
+    return new ResponseEntity<>(response, HttpStatus.FOUND);
   }
 }

@@ -1,5 +1,8 @@
 package com.siri.services.Impl;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +35,19 @@ public class FoodItemsServiceImpl implements FoodItemsService{
     foodItems = foodItemsRepository.save(foodItems);
 
     return foodItemsMapper.convertToResponse(foodItems);
+  }
+
+  @Override
+  public List<FoodItemsResponse> readFoodItems() {
+    List<FoodItems> foodItems = foodItemsRepository.findAll();
+    return foodItems.stream().map(object -> foodItemsMapper.convertToResponse(object)).collect(Collectors.toList());
+  }
+
+  @Override
+  public FoodItemsResponse readFoodItem(String id) {
+    FoodItems item =  foodItemsRepository.findById(id).orElseThrow(() -> new RuntimeException("Food not found for id: "+id));
+
+    return foodItemsMapper.convertToResponse(item);
   }
   
 }
