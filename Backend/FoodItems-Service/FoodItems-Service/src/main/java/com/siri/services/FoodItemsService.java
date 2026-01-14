@@ -14,4 +14,6 @@ public interface FoodItemsService {
   List<FoodItemsResponse> readFoodItems();
 
   FoodItemsResponse readFoodItem(String id);
+
+  void deleteFoodItem(String url);
 }

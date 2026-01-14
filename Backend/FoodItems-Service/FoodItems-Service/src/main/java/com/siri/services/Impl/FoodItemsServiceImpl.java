@@ -49,5 +49,14 @@ public class FoodItemsServiceImpl implements FoodItemsService{
 
     return foodItemsMapper.convertToResponse(item);
   }
+
+  @Override
+  public void deleteFoodItem(String id) {
+    FoodItemsResponse food = readFoodItem(id);
+    String result = cloudinaryImageService.deleteFile(food.getImageUrl());
+    if("ok".equals(result)){
+      foodItemsRepository.deleteById(id);
+    }
+  }
   
 }
